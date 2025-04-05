@@ -32,6 +32,16 @@ services:
       - otel-collector
     networks:
       - elastic-network
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./otel/tempo:/etc
+    ports:
+      - "14268:14268"  # Jaeger ingestion (OTLP recommended)
+      - "3200:3200"    # Tempo HTTP API
+    networks:
+      - elastic-network
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
