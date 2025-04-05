@@ -14,3 +14,20 @@ spring:
     placeholder-replacement: false
     baseline-on-migrate: true
     validate-on-migrate: true
+  threads:
+    virtual:
+      enabled: true
+
+otel:
+  traces:
+    exporter: otlp
+    sampler: parentbased_always_on
+  metrics:
+    exporter: otlp
+  exporter:
+    otlp:
+      endpoint: http://localhost:4317
+      protocol: grpc
+  instrumentation:
+    micrometer:
+      enabled: true
