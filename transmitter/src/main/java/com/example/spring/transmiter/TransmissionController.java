@@ -1,5 +1,6 @@
 package com.example.spring.transmiter;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +14,12 @@ public class TransmissionController {
 
     private final TransmissionRepository repository;
 
+    private final MeterRegistry meterRegistry;
+
     @PostMapping
     public void transmit(@RequestBody TransmissionDto transmissionDto) {
         repository.save(transmissionDto.toTransmission());
+        meterRegistry.counter("transmission.count").increment();
     }
 
     public record TransmissionDto(String name, String value) {

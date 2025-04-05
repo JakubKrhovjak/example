@@ -18,6 +18,18 @@ spring:
     virtual:
       enabled: true
 
+management:
+  metrics:
+    enable:
+      all: true
+  endpoint:
+    health:
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
 otel:
   traces:
     exporter: otlp
