@@ -22,7 +22,6 @@ exporters:
     endpoint: "0.0.0.0:9464"
   debug:
     verbosity: detailed
-  logging: {} # For debugging logs
 
 processors:
   batch:
@@ -39,6 +38,6 @@ service:
       exporters: [ prometheus,  debug]
     logs: # <-- Add this pipeline
       receivers: [ otlp ]
-      exporters: [ logging, debug ]
+      exporters: [ debug ]
 
 
