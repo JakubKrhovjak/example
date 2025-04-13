@@ -1,4 +1,5 @@
 <configuration>
+
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
         <http>
             <url>http://localhost:3100/loki/api/v1/push</url>
@@ -8,11 +9,11 @@
         <format>
             <label>
                 <pattern>
-                    app=${spring.application.name},level=%level
+                    app=transmitter,level=%level,trace_id=%X{trace_id}
                 </pattern>
             </label>
             <message>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{trace_id}] %logger{36} - %msg%n</pattern>
             </message>
         </format>
         <batch>
