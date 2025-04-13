@@ -42,6 +42,31 @@ services:
       - "3200:3200"    # Tempo HTTP API
     networks:
       - elastic-network
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - elastic-network
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: promtail
+    volumes:
+      - /var/log:/var/log
+      - /etc/machine-id:/etc/machine-id:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/docker-config.yaml
+    depends_on:
+      - loki
+    configs:
+      - source: promtail_config
+        target: /etc/promtail/docker-config.yaml
+    networks:
+      - elastic-network
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -53,6 +78,10 @@ services:
       - prometheus
     networks:
       - elastic-network
+
+configs:
+  promtail_config:
+    file: ./otel/promtail-config.yaml
 
 networks:
   elastic-network:

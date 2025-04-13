@@ -1,0 +1,28 @@
+<configuration>
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+            <connectTimeoutMs>2000</connectTimeoutMs>
+            <readTimeoutMs>2000</readTimeoutMs>
+        </http>
+        <format>
+            <label>
+                <pattern>
+                    app=${spring.application.name},level=%level
+                </pattern>
+            </label>
+            <message>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </message>
+        </format>
+        <batch>
+            <maxItems>1024</maxItems>
+            <maxBytes>1048576</maxBytes>
+            <timeoutMs>5000</timeoutMs>
+        </batch>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOKI" />
+    </root>
+</configuration>
